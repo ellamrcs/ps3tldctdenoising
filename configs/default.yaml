@@ -1,0 +1,82 @@
+# Default PS3T configuration, matching the hyperparameters reported in
+# Section 2.6 of the paper (patch size, batch size, optimizer, loss
+# weights, epochs, seed).
+
+seed: 42
+
+data:
+  data_root: "./data/mayo_ldct"     # PREPROCESSED per-patient .npy layout (output of
+                                     # scripts/preprocess_mayo.py -- what MayoLDCTDataset
+                                     # actually reads at train/eval time)
+  anatomy: "abdomen"                # abdomen | chest | head
+  patch_size: [64, 64]              # sinogram patch: (angles, detector_bins)
+  train_frac: 0.70
+  val_frac: 0.15
+  num_workers: 4
+  use_synthetic: false              # set true to smoke-test without real data
+
+# Raw TCIA download paths (RAW inputs, consumed only by
+# scripts/preprocess_mayo.py -- these are two SEPARATE directory trees, not
+# read directly by training/evaluation):
+#   python scripts/preprocess_mayo.py \
+#       --dicom-root <raw_data.dicom_root> \
+#       --projection-root <raw_data.projection_root> \
+#       --output-root <data.data_root> --anatomy <data.anatomy>
+raw_data:
+  dicom_root: "./raw/mayo_ldct/dicom"            # reconstructed-image DICOM series
+  projection_root: "./raw/mayo_ldct/projections" # raw projection/sinogram data
+
+model:
+  angles: 64
+  detector_bins: 64
+  embed_dim: 256               # confirmed: user-specified
+  state_dim: 128                # confirmed: user-specified
+  num_attn_heads: 8             # confirmed: user-specified (also resolves the
+                                 # 256 % 6 != 0 conflict from the originally
+                                 # requested value of 6 -- see git history /
+                                 # prior discussion if you want heads=6 exactly,
+                                 # which would require embed_dim to be a
+                                 # multiple of 6 instead, e.g. 252).
+  num_vit_encoder_layers: 3     # confirmed: user-specified
+  num_vit_decoder_layers: 3     # confirmed: user-specified
+  vit_patch_size: 8             # confirmed: user-specified (8x8)
+  image_size: 64
+  dropout: 0.0
+  photon_epsilon: 1.0e-3        # confirmed: user-specified (Eq. 3 stability constant)
+
+# Scanner acquisition geometry, sourced from DICOM headers of the Mayo
+# Clinic LDCT and Projection Dataset (confirmed against a real study in
+# this collection; verify per-patient as vendor/protocol can vary):
+#   (0018,1110) Distance Source to Detector
+#   (0018,1111) Distance Source to Patient
+#   (0018,1164)/(0028,0030)-style Pixel Spacing on the detector
+
+geometry:
+  distance_source_to_detector_mm: 1085.6   # DICOM (0018,1110)
+  distance_source_to_patient_mm: 595.0     # DICOM (0018,1111)
+  detector_pixel_spacing_mm: 0.7421875     # DICOM Pixel Spacing
+  # "parallel" (default): DifferentiableFBP, geometry-agnostic, well-tested.
+  # "fan": FanBeamFBP using the true acquisition geometry above -- more
+  # physically accurate but NOT yet numerically validated against a
+  # reference implementation (see ps3t/model/fan_fbp.py docstring).
+  # Switch to "fan" once you've cross-checked reconstructions on a
+  # known phantom.
+  beam_type: "parallel"
+
+loss:
+  lambda1: 0.4   # projection loss weight
+  lambda2: 0.4   # reconstruction consistency loss weight
+  lambda3: 0.2   # Poisson physics loss weight
+
+train:
+  epochs: 50
+  batch_size: 8
+  lr: 1.0e-4
+  optimizer: "adam"
+  lr_schedule: "cosine"
+  amp: true                         # automatic mixed precision (FP16)
+  grad_clip_norm: 1.0
+  checkpoint_dir: "./checkpoints"
+  log_every: 50
+  val_every: 1
+  output_dir: "./outputs"

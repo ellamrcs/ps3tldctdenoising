@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ps3t"
+version = "0.1.0"
+description = "Physics-Guided Sequential State Space Transformer (PS3T) for projection-domain LDCT denoising"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Luella Marcos" },
+    { name = "Paul Babyn" },
+    { name = "Javad Alirezaie" },
+]
+dependencies = [
+    "torch>=2.1.0",
+    "numpy>=1.24.0",
+    "PyYAML>=6.0",
+    "tqdm>=4.65.0",
+    "scipy>=1.10.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4.0", "black>=24.0.0", "flake8>=7.0.0"]
+
+[tool.setuptools.packages.find]
+include = ["ps3t*"]
