@@ -298,7 +298,7 @@ and, if helpful, this implementation:
 @software{ps3t_implementation,
   title  = {PS3T: Implementation},
   year   = {2026},
-  url    = {https://github.com/<your-org>/ps3t}
+  url    = {https://github.com/ellamrcs/ps3tldctdenoising}
 }
 ```
 
