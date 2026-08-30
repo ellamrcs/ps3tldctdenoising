@@ -60,7 +60,7 @@ Every module maps directly to a section of the paper:
 ## Repository layout
 
 ```
-ps3t/
+ps3tldctdenoising/
 ├── ps3t/                     # installable package
 │   ├── model/
 │   │   ├── projection_embedding.py
