@@ -1,6 +1,6 @@
 # PS³T — Physics-Guided Sequential State Space Transformer
 
-> Marcos, L.; Babyn, P.; Alirezaie, J. **Physics-Guided Sequential State Space Transformer (PS³T) for Projection Domain LDCT Denoising.** *Signals [submitted]*, 2026.
+> Marcos, L.; Babyn, P.; Alirezaie, J. **Physics-Guided Sequential State Space Transformer (PS³T) for Projection Domain LDCT Denoising.** *Signals [accepted]*, 2026.
 
 PS³T is a projection-domain (sinogram) denoising framework for Low-Dose CT (LDCT) that combines:
 
