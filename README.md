@@ -1,4 +1,4 @@
-# PS³T — Physics-Guided Sequential State Space Transformer
+# PS³T: Physics-Guided Sequential State Space Transformer
 
 > Marcos, L.; Babyn, P.; Alirezaie, J. **Physics-Guided Sequential State Space Transformer (PS³T) for Projection Domain LDCT Denoising.** *Signals [accepted]*, 2026.
 
