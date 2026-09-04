@@ -288,7 +288,7 @@ If you use this code, please cite the original paper:
   author  = {Marcos, Luella and Babyn, Paul and Alirezaie, Javad},
   journal = {Signals},
   year    = {2026},
-  note    = {Submitted}
+  note    = {Accepted}
 }
 ```
 
